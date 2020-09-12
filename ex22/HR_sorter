@@ -2,3 +2,26 @@
 
 # Put your code here
 # You may only use the following external programs: ls, echo, awk, cat, grep, sort, wc, bc
+# Order resumes based on certain Keywords
+
+
+#ls ./submissions
+
+cat input.txt | gawk 'BEGIN{
+	while((getline line <"input.txt") > 0){
+		match(line,/([[:digit:].]+)/,a);
+		#print a[1]
+		split(line,ar,a[1]);
+		ar[1]=substr(ar[1],1,length(ar[1])-1);
+		Map[ar[1]]=a[1];
+	}
+}{
+}
+END{
+	for(k in Map){
+		print Map[k];
+	}
+	#Now I need the file names
+}'
+
+
