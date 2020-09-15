@@ -12,10 +12,8 @@ do
 done
 
 
-#echo ${argArray[@]}
-
 gawk 'BEGIN{
-	while((getline line <"testcases/input.txt1") > 0){
+	while((getline line < "testcases/input.txt6") > 0){
 		match(line,/([[:digit:].]+)/,a);
 		split(line,ar,a[1]);
 		ar[1]=substr(ar[1],1,length(ar[1])-1);
@@ -24,77 +22,40 @@ gawk 'BEGIN{
 	Total = 0;
 	split("",filenames)
 	for(f in argArray){
-		print f
+		#print f
 	}
 }
 {
 	#Use Grep!!!
-	#(FNR==1)&&(NR!=1)
 	if(fname != FILENAME){ #FNR counts the number of lines in the new input field starting with 1!
-		#Reformat name
-		#name = FILENAME
-		#gsub(/submissions\//,"",name)
-		#Map1[name]=Total; #Maps Filename to total
-		#Reset total
+		#Reset Total
 		Total=0
-		#print $FILENAME
 		for(k in Map){
-			#var3=format,k,FILENAME
-			"grep -i \"" k "\" " FILENAME " | wc -l" | getline n
-			#print n
-			#n=system(cmd)
+			"grep -i -o \"" k "\" " FILENAME " | wc -l" | getline n
 			Total+=Map[k]*n
-			#print Map[k],n
-			#print Map[k]*n
 		}
-		print Total,FILENAME
+		gsub(/submissions\//,"",FILENAME) #erases the submission path
+		Map1[FILENAME]=Total; #Maps filename to total
 	}
-	#for(k in Map){
-	#	Total+=Map[k]*gsub(/k/,"",$0);
-	#	n=system("grep -o $k $FILENAME | wc -l")
-	#	print n
-	#}
 	#print NR,FNR
 	fname=FILENAME
 }
 END{
+	n=asort(Map1,values)
 
-	#for(k in Map1){
-		#print Map1[k],k
-	#}
+	k=asort(Map1,values2)
+	for(j=1; j<=k; j++){
+		for(f in Map1){
+			if(values2[j]==Map1[f]){
+				values2[j]=f;
+				delete Map1[f];
+			}
+		}
+	}
 
-	max=0
-	name
-	split("",sortedVal)
-	split("",sortedName)
-	i=0
-	#Find the max total each loop
-	#for(k in Map1){
-	#	for(k in Map1){
-	#		if(max<Map1[k]){
-	#			max=Map1[k];
-	#			name=k;
-	#		}
-	#	}
-	#	sortedVal[i]=max;
-	#	sortedName[i]=name;
-	#	#print name
-	#	delete Map1[name];
-	#	max=0
-	#}
-
-	#for(k in Map1){
-	#	sortedVal[i+1]=Map1[k];
-	#	sortedName[i+1]=k;
-	#}
-
-	#for(k in Map1){
-	#	#print Map1[k],k
-	#}
-
-	#for(j=0; j<=i-1; j++){
-		#print sortedVal[j],sortedName[j]
-	#}
+	for(l=n; l>=1; l--){
+		print values[l],values2[l]
+	}
 
 }' ${argArray[@]}
 
