@@ -4,41 +4,24 @@
 # You may only use the following external programs: ls, echo, awk, cat, grep, sort, wc, bc
 # Order resumes based on certain Keywords
 
-argArray=()
-
-for files in submissions/*
-do
-	argArray+=($files)
-done
-
-
-gawk 'BEGIN{
+ls submissions | gawk 'BEGIN{
 	while((getline line < "input.txt") > 0){
 		match(line,/([[:digit:].]+)/,a);
 		split(line,ar,a[1]);
 		ar[1]=substr(ar[1],1,length(ar[1])-1);
 		Map[ar[1]]=a[1];
 	}
-	Total = 0;
 }
 {
-	#Use Grep!!!
-	if(fname != FILENAME){ #FNR counts the number of lines in the new input field starting with 1!
-		#Reset Total
-		Total=0
-		for(k in Map){
-			"grep -i -o \"" k "\" " FILENAME " | wc -l" | getline n
-			Total+=Map[k]*n
-		}
-		gsub(/submissions\//,"",FILENAME) #erases the submission path
-		Map1[FILENAME]=Total; #Maps filename to total
+	Total=0
+	for(k in Map){
+		"grep -i -o \"" k "\" submissions/" $0 " | wc -l" | getline n
+		Total+=Map[k]*n
 	}
-	#print NR,FNR
-	fname=FILENAME
+	Map1[$0]=Total
 }
 END{
 	n=asort(Map1,values)
-
 	k=asort(Map1,values2)
 	for(j=1; j<=k; j++){
 		for(f in Map1){
@@ -48,12 +31,10 @@ END{
 			}
 		}
 	}
-
 	for(l=n; l>=1; l--){
 		print values[l],values2[l]
 	}
-
-}' ${argArray[@]}
+}'
 
 
 
