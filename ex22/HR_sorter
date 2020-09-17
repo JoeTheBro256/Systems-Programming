@@ -13,17 +13,13 @@ done
 
 
 gawk 'BEGIN{
-	while((getline line < "testcases/input.txt6") > 0){
+	while((getline line < "input.txt") > 0){
 		match(line,/([[:digit:].]+)/,a);
 		split(line,ar,a[1]);
 		ar[1]=substr(ar[1],1,length(ar[1])-1);
 		Map[ar[1]]=a[1];
 	}
 	Total = 0;
-	split("",filenames)
-	for(f in argArray){
-		#print f
-	}
 }
 {
 	#Use Grep!!!
