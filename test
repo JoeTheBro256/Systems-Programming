@@ -1,0 +1,28 @@
+#!/bin/bash
+
+
+cd ./assignment1
+./check.sh ex1.sh
+./check.sh ex2.sh
+./check.sh ex3.sh
+./check.sh ex4.sh
+./check.sh ex5.sh
+./check.sh ex6.sh
+./check.sh ex7.sh
+./check.sh ex8.sh
+./check.sh ex9.sh
+./check.sh ex10.sh
+./check.sh ex11.sh
+./check.sh ex12.sh
+./check.sh ex13.sh
+./check.sh ex14.sh
+./check.sh ex15.sh
+./check.sh ex16.sh
+./check.sh ex17.sh
+./check.sh ex18.sh
+./check.sh ex19.sh
+./check.sh ex20.sh
+./check.sh ex21.sh
+
+cd ex22/testcases
+./testall
