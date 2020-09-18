@@ -22,7 +22,6 @@ ls submissions | gawk 'BEGIN{
 }
 END{
 	n=asort(Map1,values)
-	k=n
 	for(i=n; i>=1; i--){
 		for(k in Map1){
 			if(values[i] == Map1[k]){
