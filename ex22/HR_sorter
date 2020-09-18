@@ -5,7 +5,7 @@
 # Order resumes based on certain Keywords
 
 ls submissions | gawk 'BEGIN{
-	while((getline line < "input.txt") > 0){
+	while((getline line < "testcases/input.txt6") > 0){
 		match(line,/([[:digit:].]+)/,a);
 		split(line,ar,a[1]);
 		ar[1]=substr(ar[1],1,length(ar[1])-1);
@@ -22,17 +22,14 @@ ls submissions | gawk 'BEGIN{
 }
 END{
 	n=asort(Map1,values)
-	k=asort(Map1,values2)
-	for(j=1; j<=k; j++){
-		for(f in Map1){
-			if(values2[j]==Map1[f]){
-				values2[j]=f;
-				delete Map1[f];
+	k=n
+	for(i=n; i>=1; i--){
+		for(k in Map1){
+			if(values[i] == Map1[k]){
+				delete Map1[k];
+				print values[i],k;
 			}
 		}
-	}
-	for(l=n; l>=1; l--){
-		print values[l],values2[l]
 	}
 }'
 
