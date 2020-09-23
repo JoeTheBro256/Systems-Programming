@@ -3,22 +3,53 @@
 #include "card.h"
 
 
+//Need to call next_card method from deck.h (Shaun)
+
 int add_card(struct player* target, struct card* new_card){
-	printf("%d",target->hand_size);
-	target->hand_size=5;
-	printf("%d",target->hand_size);
+	struct hand* temp;
+	temp = (struct hand*)malloc(sizeof(struct hand));
+	if(temp == NULL){ return -1; }
+
+	temp->top = *new_card;
+	temp->next = target->card_list;
+
+	target->card_list = temp;
+
 	return 1;
+}
+
+
+void print_list(){
+	struct hand* temp;
+	int i = 1;
+
+	temp = user.card_list;
+	while(temp != NULL){
+		printf("%c%c", temp->top.suit, temp->top.rank[1]);
+		temp = temp->next;
+		i++;
+	}
+
 }
 
 
 int main(){
 	//These will be declared in an initialization function!
-	//The parameters of these pointers need to be passed to the function properly
+	//The parameters of these pointers need to be passed to the function prope
 
-	struct card* new_card;
+	//print_list();
+
+	struct card* new_card1;
+	struct card new_card;
+	new_card.suit='D';
+	new_card.rank[1]='6';
+	new_card1 = &new_card;
 	struct player* user1 = &user;
-	add_card(&user1,&new_card);
 
+	add_card(user1,new_card1);
+	add_card(user1,new_card1);
+
+	print_list();
 
 	return 0;
 }
