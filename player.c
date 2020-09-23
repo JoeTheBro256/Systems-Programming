@@ -18,6 +18,30 @@ int add_card(struct player* target, struct card* new_card){
 	return 1;
 }
 
+int remove_card(struct player* target, struct card* old_card){
+	struct hand* iterator = target->card_list;
+	struct hand* previous = NULL;
+	if(iterator == NULL) {return 0;}
+	while(iterator->top.suit != old_card->suit && iterator->top.rank[0] != old_card->rank[0] 
+		&& iterator->top.rank[1] != old_card->rank[1]){
+		previous = iterator;
+		iterator = iterator->next;
+		if(iterator == NULL){
+			return 0;
+		}
+	}
+
+	if(previous != NULL){
+		previous->next = iterator->next;
+	}else{
+		target->card_list = iterator->next;
+	}
+
+	free(iterator);
+
+	return 1;
+}
+
 
 void print_list(){
 	struct hand* temp;
@@ -48,6 +72,8 @@ int main(){
 
 	add_card(user1,new_card1);
 	add_card(user1,new_card1);
+
+	printf("%d",remove_card(user1,new_card1));
 
 	print_list();
 
