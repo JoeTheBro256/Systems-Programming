@@ -54,25 +54,36 @@ int shuffle(){
 	}
 	return 1;
 }
-/*
+
 int deal_player_cards(struct player* player){
 	//Use linked list techniques
 	int i;
 	for(i = 0; i <= 6; i++){
 		if(deck_instance.top_card == 51){ return -1; } //If deck is empty return -1
-		player->card_list->next = deck_instance.list[deck_instance.top_card];
+		player->card_list->next->top = deck_instance.list[deck_instance.top_card];
 		deck_instance.top_card++;
 	}
 }
-*/
+
 size_t deck_size(){
 	return 52-deck_instance.top_card;
+}
+
+struct card* next_card(){
+	struct deck* top_card = &deck_instance;
+
+	struct card* top = &(top_card->list[deck_instance.top_card]);
+
+	printf("%c%c",top->suit,top->rank[0]);
+
+	deck_instance.top_card++;
+	return top;
 }
 
 
 int main(){
 
-	//init();
+	init();
 
 	//display_deck();
 
@@ -82,8 +93,16 @@ int main(){
 
 	//display_deck();
 
-	printf("%d",deck_size());
-	//deal_player_cards(player*);
+	//printf("%d",deck_size());
+
+	//struct player* player = &user;
+
+	//deal_player_cards(player);
+
+	struct card* next = next_card();
+
+	printf("%c%c\n",next->suit,next->rank[0]);
+	printf("%d",deck_instance.top_card);
 
 	return 0;
 }
