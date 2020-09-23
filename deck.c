@@ -28,15 +28,15 @@ void init(){
 		}
 	}
 }
-/*
+
 void display_deck(){
 	int size = (sizeof(deck_instance.list) / sizeof(deck_instance.list[0]) );
 	int i;
-	for(i = 0; i <= size; i++){
-		
+	for(i = deck_instance.top_card; i <= size; i++){
+		printf("%c%c%c\n",deck_instance.list[i].suit,deck_instance.list[i].rank[1],deck_instance.list[i].rank[0]);
 	}
 }
-*/
+
 int shuffle(){
 	srand(time(0)); //Set random seed based on current time
 
@@ -60,8 +60,7 @@ int deal_player_cards(struct player* player){
 	int i;
 	for(i = 0; i <= 6; i++){
 		if(deck_instance.top_card == 51){ return -1; } //If deck is empty return -1
-		player->card_list->next->top = deck_instance.list[deck_instance.top_card];
-		deck_instance.top_card++;
+		add_card(player,next_card()); //add_card is a player function
 	}
 }
 
@@ -74,18 +73,28 @@ struct card* next_card(){
 
 	struct card* top = &(top_card->list[deck_instance.top_card]);
 
-	printf("%c%c",top->suit,top->rank[0]);
+	//printf("%c%c",top->suit,top->rank[0]);
 
 	deck_instance.top_card++;
 	return top;
 }
 
+void display_hand(){
+	struct hand* users_hand = user.card_list;
+	int i = 1;
+
+	while(users_hand != NULL){
+		printf("%c%c%c ",users_hand->top.suit,users_hand->top.rank[0],users_hand->top.rank[1]);
+		users_hand = users_hand->next;
+		i++;
+	}
+}
 
 int main(){
 
 	init();
-
-	//display_deck();
+	printf("Display Deck: \n");
+	display_deck();
 
 	//shuffle();
 
@@ -99,10 +108,16 @@ int main(){
 
 	//deal_player_cards(player);
 
-	struct card* next = next_card();
+	struct player* user1 = &user;
 
-	printf("%c%c\n",next->suit,next->rank[0]);
-	printf("%d",deck_instance.top_card);
+	//struct card* next = next_card();
+
+	//printf("%c%c\n",next->suit,next->rank[0]);
+	//printf("%d",deck_instance.top_card);
+
+	deal_player_cards(user1);
+	printf("Display hand: \n");
+	display_hand();
 
 	return 0;
 }
