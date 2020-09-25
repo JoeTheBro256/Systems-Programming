@@ -7,6 +7,8 @@
 
 void init(){
 	//Use integer arrays to represent chars
+	//struct deck new_deck;
+	//deck_instance = new_deck;
 	int suit[] = {67,83,72,68};
 	int rank[] = {50,51,52,53,54,55,56,57,74,81,75,65}; //Will handle rand 10 as last element
 
@@ -38,6 +40,7 @@ void display_deck(){
 }
 
 int shuffle(){
+	init();
 	srand(time(0)); //Set random seed based on current time
 
 	int deck_size = ( sizeof(deck_instance.list) / sizeof(deck_instance.list[0]) );
@@ -90,6 +93,7 @@ void display_hand(){
 	}
 }
 
+/*
 int main(){
 
 	init();
@@ -116,8 +120,13 @@ int main(){
 	//printf("%d",deck_instance.top_card);
 
 	deal_player_cards(user1);
+
+	printf("\n\n%c\n\n",check_add_book(user1));
+
 	printf("Display hand: \n");
 	display_hand();
 
+
 	return 0;
 }
+*/
