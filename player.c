@@ -15,7 +15,7 @@ int add_card(struct player* target, struct card* new_card){
 
 	target->hand_size++;
 
-	//check_add_book(target);
+	check_add_book(target);
 
 	return 1;
 }
@@ -33,9 +33,6 @@ int remove_card(struct player* target, struct card* old_card){
 			return 0;
 		}
 	}
-
-	//At this poin
-	printf("\nRemove : %c==%c   %c==%c    \n",iterator->top.rank[0],old_card->rank[0],iterator->top.suit,old_card->suit);
 
 
 	if(previous != NULL){
@@ -118,7 +115,7 @@ char check_add_book(struct player* target){
 	while(iterator != NULL){
 		char rank = iterator->top.rank[0];
 		int count = count_rank_cards(target,rank);
-
+		printf("%d\n",count);
 		if(count == 4){
 			//remove all 4 suits from player's hand
 			printf("I have made it here!");
