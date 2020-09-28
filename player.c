@@ -3,6 +3,7 @@
 #include "card.h"
 
 //Add card adds a card to the player's hand
+//Joseph Mitchell
 int add_card(struct player* target, struct card* new_card){
 	struct hand* temp;
 	temp = (struct hand*)malloc(sizeof(struct hand));
@@ -20,6 +21,7 @@ int add_card(struct player* target, struct card* new_card){
 	return 1;
 }
 //Removes a card from the players hand
+//Joseph Mitchell
 int remove_card(struct player* target, struct card* old_card){
 	struct hand* iterator = target->card_list;
 	struct hand* previous = NULL;
@@ -47,7 +49,7 @@ int remove_card(struct player* target, struct card* old_card){
 
 	return 1;
 }
-
+//Joseph Mitchell
 void print_books(struct player* target){
 	int i;
 	for(i=0;i<=6;i++){
@@ -56,7 +58,7 @@ void print_books(struct player* target){
 }
 
 //Helper function to check_add_book
-//This will add the book to the player's book list, then it will check for gameover(Shaun)!
+//Joseph Mitchell
 int add_to_book(struct player* target,char rank){
 	int i;
 	for(i=0; i <= 6; i++){
@@ -66,33 +68,7 @@ int add_to_book(struct player* target,char rank){
 		}
 	}
 }
-/*
-int remove_all_rank(struct player* target,char rank){
-	struct hand* iterator = target->card_list;
-	struct hand* previous = NULL;
-
-	if(iterator == NULL){return 0;}
-	while(iterator->top.rank[0] != rank){
-		previous = iterator;
-		iterator = iterator->next;
-		if(iterator == NULL){
-			return 0;
-		}
-	}
-
-	//found the item
-
-	if(previous != NULL){
-		previous->next = iterator->next;
-	}else{
-		target->card_list = iterator->next;
-	}
-
-	free(iterator);
-
-	return 1;
-}
-*/
+//Joseph Mitchell
 int count_rank_cards(struct player* target,char rank){
 	int i=0;
 	struct hand* iterator = target->card_list;
@@ -100,14 +76,14 @@ int count_rank_cards(struct player* target,char rank){
 	while(iterator != NULL){
 		if(iterator->top.rank[0] == rank){
 			i++;
-			printf("%d\n",i);
+			//printf("%d\n",i);
 		}
 		iterator = iterator->next;
 	}
 
 	return i;
 }
-
+//Joseph Mitchell
 char check_add_book(struct player* target){
 	struct hand* iterator = target->card_list;
 	int count;
@@ -115,10 +91,10 @@ char check_add_book(struct player* target){
 	while(iterator != NULL){
 		char rank = iterator->top.rank[0];
 		int count = count_rank_cards(target,rank);
-		printf("%d\n",count);
+		//printf("%d\n",count);
 		if(count == 4){
 			//remove all 4 suits from player's hand
-			printf("I have made it here!");
+			//printf("I have made it here!");
 			//remove_all_rank(target,rank);
 
 			struct card card1,card2,card3,card4;
@@ -148,6 +124,23 @@ char check_add_book(struct player* target){
 	return '\0';//null char will indicate no books!
 }
 
+//Shaun Ghosh
+int transfer_cards(struct player* src, struct player* dest, char rank){
+	struct hand* iterator1 = (*src).card_list;
+	int count = 0;
+	while(search(src,rank) == 1){
+		if((*iterator1).top.rank[0] == rank){//loop till the src has a particular card
+			add_card(dest,&(iterator1->top));//add card to dest
+			remove_card(src,&(iterator1->top));//remove card from src
+			//add_card(dest,&(iterator1-top)); //Slight edge-case found by running remove before add
+			count++;
+		}
+		iterator1 = iterator1->next;//next card/hand
+	}
+	return count;
+}
+
+//Shaun Ghosh
 int gameover(struct player* target){
 	if((*target).book[6] != '\0'){
 		return 1;
@@ -156,7 +149,7 @@ int gameover(struct player* target){
 		return 0;
 	}
 }
-
+//Shaun Ghosh
 int search(struct player* target,char rank){
 	struct hand* list = target->card_list;
 	if(list == NULL){return 0;}
@@ -169,24 +162,37 @@ int search(struct player* target,char rank){
 
 	return 1;
 }
-
-void clear_player_hand(struct player* target){
+//Shaun Ghosh
+int reset_player(struct player* target){
+	//1) Empty the player's hand
 	target->card_list = NULL;
-}
-
+	free(target->card_list);
+	//2) Empty the player's book
+	int i;
+	for(i=0;i<=6;i++){
+		target->book[i] = '\0';
+	}
+	//3) Set hand_size to 0
+	target->hand_size = 0;
 
 /*
-void print_hand(struct player* target){
-	struct hand* temp;
-	int i = 1;
-
-	temp = target->card_list;
-	while(temp != NULL){
-		printf("%c%c", temp->top.suit, temp->top.rank[1]);
-		temp = temp->next;
-		i++;
+	int *ptr = &((*target).book);
+	while(ptr != NULL){
+		*ptr = '\0';
+		ptr++;
 	}
-
+	//free memory of the item
+	free((*target).card_list);
+	//change direction of the pointer to an empty space
+ 	(*target).card_list = NULL;
+ 	//verify if pointer points to NULL
+*/ 
+	return 0;
+}
+/*
+void clear_player_hand(struct player* target){
+	target->card_list = NULL;//This is the reset of the player's hand
+	free(target->card_list);//This is freeing the reset of the player's hand
 }
 */
 /*
