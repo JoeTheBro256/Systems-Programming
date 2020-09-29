@@ -210,6 +210,18 @@ char computer_play(struct player* target){
 	return (*iterator2).top.rank[0];
 }
 
+//Shaun Ghosh
+char user_play(struct player* target){
+	char input;
+	printf("Your Play: ");
+	scanf(" %c", &input);
+	while(search(target, input) != 1){
+		printf("Card not present in hand. Please reselect your play: ");
+		scanf(" %c", &input);
+	}	
+	return input;
+}
+
 /*
 void clear_player_hand(struct player* target){
 	target->card_list = NULL;//This is the reset of the player's hand
