@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 #include "player.h"
 #include "card.h"
 
@@ -189,6 +191,25 @@ int reset_player(struct player* target){
 */ 
 	return 0;
 }
+
+//Shaun Ghosh
+char computer_play(struct player* target){
+	srand(time(0));
+	struct hand* iterator1 = (*target).card_list;
+	int count = 0;
+	while (iterator1 != NULL){
+		count++;
+		iterator1 = (*iterator1).next;
+	}
+	int num = rand() % count;
+	int i;
+	struct hand* iterator2 = (*target).card_list;
+	for(i=0; i<num; i++){
+		iterator2 = (*iterator2).next;
+	}
+	return (*iterator2).top.rank[0];
+}
+
 /*
 void clear_player_hand(struct player* target){
 	target->card_list = NULL;//This is the reset of the player's hand
