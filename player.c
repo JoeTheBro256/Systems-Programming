@@ -7,6 +7,18 @@
 //Add card adds a card to the player's hand
 //Joseph Mitchell
 int add_card(struct player* target, struct card* new_card){
+	//Should only add card if the card doesn't already exist in their hand!
+	/*
+	struct hand* target_hand = target->card_list;
+	while(target_hand != NULL){
+		if((target_hand->top.suit == new_card->suit)
+			&& (target_hand->top.rank[1] == new_card->rank[1])
+			&& (target_hand->top.rank[0] == new_card->rank[0]) ){
+			return 0; // Player already has this card!
+		}
+		target_hand = target_hand->next;
+	}
+	*/
 	struct hand* temp;
 	temp = (struct hand*)malloc(sizeof(struct hand));
 	if(temp == NULL){ return -1; }
@@ -17,16 +29,18 @@ int add_card(struct player* target, struct card* new_card){
 	target->card_list = temp;
 
 	target->hand_size++;
-
+	
 	check_add_book(target);
-
+	
 	return 1;
 }
 //Removes a card from the players hand
 //Joseph Mitchell
 int remove_card(struct player* target, struct card* old_card){
+	
 	struct hand* iterator = target->card_list;
 	struct hand* previous = NULL;
+
 
 
 	if(iterator == NULL) {return 0;}
@@ -46,8 +60,11 @@ int remove_card(struct player* target, struct card* old_card){
 	}
 
 	free(iterator);
+	
 
 	target->hand_size--;
+	
+	
 
 	return 1;
 }
@@ -78,7 +95,6 @@ int count_rank_cards(struct player* target,char rank){
 	while(iterator != NULL){
 		if(iterator->top.rank[0] == rank){
 			i++;
-			//printf("%d\n",i);
 		}
 		iterator = iterator->next;
 	}
@@ -126,19 +142,30 @@ char check_add_book(struct player* target){
 	return '\0';//null char will indicate no books!
 }
 
+int remove_single_rank(struct player* target,struct player* dest, char rank){
+	struct hand* iterator = target->card_list;
+	char match;
+	while(iterator != NULL){
+		if(iterator->top.rank[0] == rank){
+			//match = &(iterator->top);
+			//remove_card(target,&(iterator->top));
+			add_card(dest,&(iterator->top));//have to add the card first
+			remove_card(target,&(iterator->top) );//Then we remove the card!
+			return 1;
+		}
+		iterator = iterator->next;
+	}
+}
+
 //Shaun Ghosh
 int transfer_cards(struct player* src, struct player* dest, char rank){
-	struct hand* iterator1 = (*src).card_list;
+	
+	//What if we designed a function to remove a single rank card?
 	int count = 0;
-	while(search(src,rank) == 1){
-		if((*iterator1).top.rank[0] == rank){//loop till the src has a particular card
-			add_card(dest,&(iterator1->top));//add card to dest
-			remove_card(src,&(iterator1->top));//remove card from src
-			//add_card(dest,&(iterator1-top)); //Slight edge-case found by running remove before add
-			count++;
-		}
-		iterator1 = iterator1->next;//next card/hand
+	while(search(src,rank)){
+		count += remove_single_rank(src,dest,rank);
 	}
+	//printf("%d",count);
 	return count;
 }
 
@@ -213,12 +240,11 @@ char computer_play(struct player* target){
 //Shaun Ghosh
 char user_play(struct player* target){
 	char input;
-	printf("Your Play: ");
-	scanf(" %c", &input);
+	scanf("%c", &input);
 	while(search(target, input) != 1){
-		printf("Card not present in hand. Please reselect your play: ");
-		scanf(" %c", &input);
-	}	
+		printf("\nError - must have at least one card from rank to play \n");
+		scanf("%c", &input);
+	}
 	return input;
 }
 
