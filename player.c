@@ -58,12 +58,10 @@ int remove_card(struct player* target, struct card* old_card){
 	}else{
 		target->card_list = iterator->next;
 	}
-
-	free(iterator);
 	
-
 	target->hand_size--;
 	
+	free(iterator);
 	
 
 	return 1;
@@ -165,13 +163,12 @@ int transfer_cards(struct player* src, struct player* dest, char rank){
 	while(search(src,rank)){
 		count += remove_single_rank(src,dest,rank);
 	}
-	//printf("%d",count);
 	return count;
 }
 
 //Shaun Ghosh
 int gameover(struct player* target){
-	if((*target).book[6] != '\0'){
+	if((*target).book[0] != '\0'){//Index used to be 6
 		return 1;
 	}
 	else{
@@ -195,7 +192,6 @@ int search(struct player* target,char rank){
 int reset_player(struct player* target){
 	//1) Empty the player's hand
 	target->card_list = NULL;
-	free(target->card_list);
 	//2) Empty the player's book
 	int i;
 	for(i=0;i<=6;i++){
@@ -222,19 +218,21 @@ int reset_player(struct player* target){
 //Shaun Ghosh
 char computer_play(struct player* target){
 	srand(time(0));
+	/*
 	struct hand* iterator1 = (*target).card_list;
 	int count = 0;
 	while (iterator1 != NULL){
 		count++;
 		iterator1 = (*iterator1).next;
 	}
-	int num = rand() % count;
+	*/
+	int num = rand() % target->hand_size;
 	int i;
-	struct hand* iterator2 = (*target).card_list;
+	struct hand* iterator = (*target).card_list;
 	for(i=0; i<num; i++){
-		iterator2 = (*iterator2).next;
+		iterator = (*iterator).next;
 	}
-	return (*iterator2).top.rank[0];
+	return (*iterator).top.rank[0];
 }
 
 //Shaun Ghosh
