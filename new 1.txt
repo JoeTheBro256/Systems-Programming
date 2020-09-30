@@ -1,0 +1,7 @@
+int gameover(struct player* target); //Return 1 when player has 7 books ; 0 else
+
+struct player* target
+
+loop target->book[0-6] == '\0' ; return 0;
+
+return 1;

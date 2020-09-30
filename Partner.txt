@@ -1,12 +1,12 @@
 								Joe							Shaun
-Function/location			add_card/player.h			search/player.h
-							remove_card/player.h		transfer_cards/player.h
-							check_add_book/player.h		game_over/player.h
-							shuffle/deck.h				reset_player/player.h
-							deal_player_cards/deck.h	computer_play/player.h
-							next_card/deck.h			user_play/player.h
-							deck_size/deck.h
+Function/location			*add_card/player.h					*search/player.h
+							*remove_card/player.h				*transfer_cards/player.h
+							*check_add_book/player.h			*game_over/player.h
+							*shuffle/deck.h						*reset_player/player.h
+							*deal_player_cards					*computer_play/player.h
+							*next_card/deck.h					*user_play/player.h
+							*deck_size/deck.h
 							
-							
+							*indicates completed function implementation
 							
 							gofish.c implementation will be a collaborative effort :)

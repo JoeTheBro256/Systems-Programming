@@ -3,7 +3,7 @@
 #include "player.h"
 #include "card.h"
 
-
+//In order for user or computer to signify rank 10, they type '0'
 void print_hand(struct player* target){
 	struct hand* temp;
 	int i = 1;
@@ -114,9 +114,6 @@ void user_turn(){
 	interface();
 	printf("\n\nPlayer 1's turn, enter a Rank: "); //User's turn
 	char rank = user_play(&user);
-	//After rank given, if computer has that rank
-	//	Player 2 has (these rank cards)
-	//	Player 1 has (these rank cards)
 	if(search(&computer,rank)){
 		user_hit(rank);
 	}else{
@@ -175,14 +172,12 @@ void user_gofish(char rank){
 	printf("\nPlayer 1 draws %c%c%c",new_card->suit,new_card->rank[1],new_card->rank[0]);
 	printf("\nPlayer 2's turn");
 	//Gameover condition check
-	//exit(0); // Debugging purposes
-	//sleep(1);
 	if(gameover(&user)){
 		int i=0;
-		while(user.book[i] != '\0'){
+		while(computer.book[i] != '\0'){
 				i++;
 		}
-		printf("\nPlayer 2 wins 7-%d",i);
+		printf("\nPlayer 1 wins 7-%d",i);
 		printf("\nDo you want to play again? [Y/N] : ");
 		char input;
 		scanf("%c",&input);
@@ -195,13 +190,13 @@ void user_gofish(char rank){
 			exit(0);
 		}else{
 			printf("\n\n");
-			reset_player(&user);
-			reset_player(&computer);
-			deal_player_cards(&user);
-			deal_player_cards(&computer);
-			shuffle();
+			reset_player(&user);//reset player's hand, book, and hand size
+			reset_player(&computer);//reset player's hand,book, and hand size
+			deal_player_cards(&user);//deal player cards
+			deal_player_cards(&computer);//deal player cards
+			shuffle();//shuffle the deck
 			deck_instance.top_card = 0; //Bring top card back to deck!
-			user_turn();
+			user_turn();//User always starts!
 		}
 	}
 	//exit(0); //Debugging purposes
@@ -212,17 +207,14 @@ void computer_turn(){
 	interface();
 	printf("\n\nPlayer 2's turn, enter a Rank: "); //User's turn
 	char rank = computer_play(&computer);
-	//After rank given, if computer has that rank
-	//	Player 2 has (these rank cards)
-	//	Player 1 has (these rank cards)
-	//sleep(1);
+	
 	printf("%c",rank);
 	//exit(0); //For Debugging purposes
 	if(search(&user,rank)){
-		computer_hit(rank);
+		computer_hit(rank);//After rank given, if user has a card of that rank, claim all of them and take another turn
 	}else{
 		//User Draws a card and Computer's turn
-		computer_gofish(rank);
+		computer_gofish(rank);//User didn't have a card of that rank
 	}
 }
 
@@ -230,11 +222,11 @@ void computer_turn(){
 
 void print_rank_cards(struct player* target,char rank){
 	struct hand* list = target->card_list;
-	while(list != NULL){
+	while(list != NULL){//While node is not null check for rank and print rank card Suit,Tens,Ones
 		if(list->top.rank[0] == rank){
 			printf(" %c%c%c ", list->top.suit, list->top.rank[1], list->top.rank[0]);//Print rank cards that target player has
 		}
-		list = list->next;
+		list = list->next;//Next card
 	}
 }
 
